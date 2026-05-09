@@ -1,8 +1,8 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from core.models import ShortenedURL
 
-
+override_settings(USE_REDIS=False)
 class URLShortenerTests(TestCase):
 
     def test_shorten_url(self):
