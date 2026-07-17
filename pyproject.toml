@@ -10,4 +10,5 @@ dependencies = [
     "djangorestframework>=3.17.1",
     "python-dotenv>=1.2.2",
     "redis>=7.4.0",
+    "sqids>=0.5.2",
 ]

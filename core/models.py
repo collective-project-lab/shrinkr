@@ -1,14 +1,7 @@
 from django.db import models
 import random
 import string
-
-
-def generate_short_code(length=6):
-    chars = string.ascii_letters + string.digits
-    while True:
-        code = ''.join(random.choices(chars, k=length))
-        if not ShortenedURL.objects.filter(short_code=code).exists():
-            return code
+from .utils import encode_id
 
 
 class ShortenedURL(models.Model):
@@ -18,9 +11,12 @@ class ShortenedURL(models.Model):
     click_count = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
-        if not self.short_code:
-            self.short_code = generate_short_code()
+        is_new_instance = self.pk is None
         super().save(*args, **kwargs)
+
+        if is_new_instance and not self.short_code:
+            self.short_code = encode_id(self.pk)
+            super().save(update_fields=['short_code'])
 
     def __str__(self):
         return f"{self.short_code} → {self.long_url}"
